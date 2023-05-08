@@ -13,11 +13,7 @@ export interface InputProps
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  (
-    { className, type, id, required, errors, disabled, ...props },
-    ref
-  ) => {
-    
+  ({ className, type, id, required, errors, disabled, ...props }, ref) => {
     return (
       <input
         id={id}

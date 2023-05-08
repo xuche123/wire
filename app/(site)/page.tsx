@@ -8,12 +8,12 @@ export default function Home() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <Image
           alt="logo"
-          height="96"
-          width="96"
-          className="mx-auto w-auto"
-          src="/logo.png"
+          height="24"
+          width="24"
+          className="mx-auto mb-4 w-auto"
+          src="/fire.png"
+          sizes="8px"
         />
-        
         <AuthForm />
       </div>
     </div>
