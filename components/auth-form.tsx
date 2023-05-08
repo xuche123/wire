@@ -7,7 +7,7 @@ import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
 import { BsGithub, BsGoogle } from "react-icons/bs"
-
+import axios from "axios"
 
 type Variant = "LOGIN" | "REGISTER"
 const AuthForm = () => {
@@ -36,9 +36,9 @@ const AuthForm = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
-
+    console.log(data)
     if (variant === "REGISTER") {
-      // register
+      axios.post("/api/register", data)
     } else if (variant === "LOGIN") {
       // login
     }
@@ -61,7 +61,7 @@ const AuthForm = () => {
             {variant === "REGISTER" && (
               <div className="">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" register={register} errors={errors} />
+                <Input id="name" {...register("name")} errors={errors} disabled={isLoading} />
               </div>
             )}
 
@@ -69,9 +69,10 @@ const AuthForm = () => {
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                register={register}
+                {...register("email")}
                 errors={errors}
                 type="email"
+                disabled={isLoading}
               />
             </div>
 
@@ -79,9 +80,10 @@ const AuthForm = () => {
               <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
-                register={register}
+                {...register("password")}
                 errors={errors}
                 type="password"
+                disabled={isLoading}
               />
             </div>
             <div>
@@ -104,11 +106,11 @@ const AuthForm = () => {
             </div>
 
             <div className="mt-6 flex gap-2">
-              <Button variant="outline" size="full" onClick={()=>socialLogin("github")}>
+              <Button variant="outline" size="full" onClick={()=>socialLogin("github")} disabled={isLoading}>
                 <BsGithub />
               </Button>
 
-              <Button variant="outline" size="full" onClick={()=>socialLogin("google")}>
+              <Button variant="outline" size="full" onClick={()=>socialLogin("google")} disabled={isLoading}>
                 <BsGoogle />
               </Button>
             </div>
