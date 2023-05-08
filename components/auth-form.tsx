@@ -1,13 +1,24 @@
 "use client"
 
 import { useCallback, useState } from "react"
+import axios from "axios"
+import { signIn } from "next-auth/react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
+import toast from "react-hot-toast"
+import { BsGithub, BsGoogle } from "react-icons/bs"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 import { Label } from "./ui/label"
-import { BsGithub, BsGoogle } from "react-icons/bs"
-import axios from "axios"
 
 type Variant = "LOGIN" | "REGISTER"
 const AuthForm = () => {
@@ -36,32 +47,74 @@ const AuthForm = () => {
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
-    console.log(data)
     if (variant === "REGISTER") {
-      axios.post("/api/register", data)
+      axios
+        .post("/api/register", data)
+        .catch((err) => {
+          toast.error("Something went wrong")
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     } else if (variant === "LOGIN") {
-      // login
+      signIn("credentials", {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error("Invalid email or password")
+          }
+
+          if (callback?.ok && !callback?.error) {
+            toast.success("Logged in!")
+          }
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
     }
   }
 
-  const socialLogin = (type : string) => {
+  const socialLogin = (type: string) => {
     setIsLoading(true)
+    signIn(type, {
+      redirect: false,
+    })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error("Invalid email or password")
+        }
 
+        if (callback?.ok && !callback?.error) {
+          toast.success("Logged in!")
+        }
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
     // NextAuth social sign in
   }
 
   return (
     <>
-      <h2 className="mt-6 text-center text-3xl font-bold leading-9 tracking-tighter text-gray-900 sm:text-4xl">
-        {variant === "REGISTER" ? "Sign up" : "Sign in"}
-      </h2>
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
+      <Card>
+        <CardHeader>
+          <CardTitle className="mt-6 text-center text-3xl font-bold leading-9 tracking-tighter text-primary sm:text-4xl">
+            {variant === "REGISTER" ? "Sign up" : "Sign in"}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
             {variant === "REGISTER" && (
               <div className="">
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" {...register("name")} errors={errors} disabled={isLoading} />
+                <Input
+                  id="name"
+                  {...register("name")}
+                  errors={errors}
+                  disabled={isLoading}
+                />
               </div>
             )}
 
@@ -92,36 +145,51 @@ const AuthForm = () => {
               </Button>
             </div>
           </form>
-
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-accent" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="bg-white px-2 text-gray-500">
+                <span className="bg-background px-2 text-gray-500">
                   Or continue with
                 </span>
               </div>
             </div>
 
             <div className="mt-6 flex gap-2">
-              <Button variant="outline" size="full" onClick={()=>socialLogin("github")} disabled={isLoading}>
+              <Button
+                variant="outline"
+                size="full"
+                onClick={() => socialLogin("github")}
+                disabled={isLoading}
+              >
                 <BsGithub />
               </Button>
 
-              <Button variant="outline" size="full" onClick={()=>socialLogin("google")} disabled={isLoading}>
+              <Button
+                variant="outline"
+                size="full"
+                onClick={() => socialLogin("google")}
+                disabled={isLoading}
+              >
                 <BsGoogle />
               </Button>
             </div>
-            
+
             <div className="mt-6 flex justify-center gap-2 px-2 text-sm text-gray-500">
-              <div>{variant === "REGISTER" ? "Already have an account?" : "Don't have an account?"}</div>
-              <div onClick={toggleVariant} className="cursor-pointer underline">{variant === "REGISTER" ? "Sign in" : "Sign up"}</div>
+              <div>
+                {variant === "REGISTER"
+                  ? "Already have an account?"
+                  : "Don't have an account?"}
+              </div>
+              <div onClick={toggleVariant} className="cursor-pointer underline">
+                {variant === "REGISTER" ? "Sign in" : "Sign up"}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     </>
   )
 }

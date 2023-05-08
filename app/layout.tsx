@@ -5,6 +5,8 @@ import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 
+import ToasterContext from "./context/ToasterContext"
+
 interface RootLayoutProps {
   children: React.ReactNode
 }
@@ -21,6 +23,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
+              <ToasterContext />
               <div className="flex-1">{children}</div>
             </div>
           </ThemeProvider>
