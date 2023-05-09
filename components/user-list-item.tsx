@@ -16,10 +16,10 @@ const UserListItem: React.FC<UserListItemProps> = ({ item }) => {
 
   const handleClick = useCallback(() => {
     setIsLoading(true)
-    axios.post('/api/conversations', {
+    axios.post('/api/conversation', {
       userId: item.id
     }).then((data) => {
-      router.push(`/conversations/${data.data.id}`)
+      router.push(`/conversation/${data.data.id}`)
     }).finally(() => {
       setIsLoading(false)
     })
@@ -32,7 +32,7 @@ const UserListItem: React.FC<UserListItemProps> = ({ item }) => {
           <div className="focus:outline-none">
             <span className="absolute inset-0" aria-hidden="true" />
             <div className="mb-1 flex items-center justify-between">
-              <p className="text-sm font-medium text-gray-900">
+              <p className="text-sm font-medium text-primary">
                 {item.name}
               </p>
             </div>
