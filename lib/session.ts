@@ -8,7 +8,7 @@ export async function getCurrentUser() {
     const session = await getServerSession(authOptions)
 
     if (!session?.user?.email) {
-      console.log(1)
+      console.log("session.ts 1")
       return null
     }
 
@@ -19,7 +19,7 @@ export async function getCurrentUser() {
     })
 
     if (!currentUser) {
-      console.log(2)
+      console.log("session.ts 2")
       return null
     }
 
