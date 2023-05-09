@@ -1,7 +1,9 @@
+import EmptyState from "@/components/empty-state"
+
 const Users = () => {
   return (
-    <div>
-      <h1>Users</h1>
+    <div className="hidden h-full lg:block lg:pl-80">
+      <EmptyState />
     </div>
   )
 }
