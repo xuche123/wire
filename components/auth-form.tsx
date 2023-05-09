@@ -1,19 +1,14 @@
 "use client"
 
-import { useCallback, useState, useEffect } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import axios from "axios"
 import { signIn, useSession } from "next-auth/react"
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { BsGithub, BsGoogle } from "react-icons/bs"
-import { useRouter } from "next/navigation"
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"

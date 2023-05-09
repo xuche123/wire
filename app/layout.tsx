@@ -1,11 +1,10 @@
 import "@/styles/globals.css"
-
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import { ThemeProvider } from "@/components/theme-provider"
 
-import ToasterContext from "./context/ToasterContext"
 import SessionContext from "./context/SessionContext"
+import ToasterContext from "./context/ToasterContext"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -22,10 +21,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <SessionContext>
-                <ToasterContext />
-                {children}
-              </SessionContext>
+            <SessionContext>
+              <ToasterContext />
+              {children}
+            </SessionContext>
           </ThemeProvider>
         </body>
       </html>

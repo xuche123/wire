@@ -1,21 +1,22 @@
-import { getCurrentUser } from "@/lib/session";
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import { NextResponse } from "next/server"
 
-export async function POST (request: Request) {
+import { db } from "@/lib/db"
+import { getCurrentUser } from "@/lib/session"
+
+export async function POST(request: Request) {
   try {
     const currentUser = await getCurrentUser()
     const body = await request.json()
     const { userId, isGroup, members, name } = body
 
     if (!currentUser?.id || !currentUser?.email) {
-      return new NextResponse('Unauthorized', {status: 401})
+      return new NextResponse("Unauthorized", { status: 401 })
     }
 
     if (isGroup && (!members || members.length < 2 || !name)) {
-      return new NextResponse('Bad Request', {status: 400})
+      return new NextResponse("Bad Request", { status: 400 })
     }
-    
+
     if (isGroup) {
       const newConversation = await db.conversation.create({
         data: {
@@ -24,17 +25,17 @@ export async function POST (request: Request) {
           users: {
             connect: [
               ...members.map((member: { value: string }) => ({
-                id: member.value
+                id: member.value,
               })),
               {
-                id: currentUser.id
-              }
-            ]
-          }
+                id: currentUser.id,
+              },
+            ],
+          },
         },
         include: {
           users: true,
-        }
+        },
       })
       return NextResponse.json(newConversation)
     }
@@ -44,19 +45,20 @@ export async function POST (request: Request) {
         OR: [
           {
             userIds: {
-              equals: [currentUser.id, userId]
-            }
+              equals: [currentUser.id, userId],
+            },
           },
           {
             userIds: {
-              equals: [userId, currentUser.id]
-            }
-          }
-        ]
-      }
+              equals: [userId, currentUser.id],
+            },
+          },
+        ],
+      },
     })
 
-    const singleConversation = existingConversations.length === 1 ? existingConversations[0] : null
+    const singleConversation =
+      existingConversations.length === 1 ? existingConversations[0] : null
 
     if (singleConversation) {
       return NextResponse.json(singleConversation)
@@ -67,22 +69,21 @@ export async function POST (request: Request) {
         users: {
           connect: [
             {
-              id: currentUser.id
+              id: currentUser.id,
             },
             {
-              id: userId
-            }
-          ]
-        }
+              id: userId,
+            },
+          ],
+        },
       },
       include: {
-        users: true
-      }
-    });
+        users: true,
+      },
+    })
 
     return NextResponse.json(newConversation)
-
   } catch (error: any) {
-    return new NextResponse('Internal Error', {status: 500})
+    return new NextResponse("Internal Error", { status: 500 })
   }
 }

@@ -17,8 +17,8 @@ const getUsers = async () => {
       where: {
         NOT: {
           email: user.email,
-        }
-      }
+        },
+      },
     })
     return users
   } catch (errors: any) {

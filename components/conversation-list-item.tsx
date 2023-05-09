@@ -1,13 +1,15 @@
 "use client"
 
-import { Conversation, Message, User } from "@prisma/client"
+import { useCallback, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useState, useCallback, useMemo } from "react"
 import { FullConversationType } from "@/types"
+import { Conversation, Message, User } from "@prisma/client"
+import clsx from "clsx"
 import { format } from "date-fns"
 import { useSession } from "next-auth/react"
-import clsx from "clsx"
+
 import useOtherUser from "@/hooks/useOtherUser"
+
 import AvatarIcon from "./avatar-icon"
 
 interface ConversationListItemProps {
@@ -15,7 +17,10 @@ interface ConversationListItemProps {
   selected: boolean
 }
 
-const ConversationListItem: React.FC<ConversationListItemProps> = ({ item, selected }) => {
+const ConversationListItem: React.FC<ConversationListItemProps> = ({
+  item,
+  selected,
+}) => {
   const router = useRouter()
   const session = useSession()
   const otherUser = useOtherUser(item)
@@ -32,7 +37,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({ item, selec
   const email = useMemo(() => {
     return session.data?.user?.email
   }, [session.data?.user?.email])
-  
+
   const hasSeen = useMemo(() => {
     if (!lastMessage) return false
 
@@ -40,22 +45,28 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({ item, selec
 
     if (!email) return false
 
-    return seenArray.filter((user)=>user.email === email).length > 0
+    return seenArray.filter((user) => user.email === email).length > 0
   }, [email, lastMessage])
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
-      return 'Sent an image'
+      return "Sent an image"
     }
 
     if (lastMessage?.body) {
       return lastMessage.body
     }
 
-    return 'Start a conversation'
+    return "Start a conversation"
   }, [lastMessage])
   return (
-    <div onClick={handleClick} className={clsx(`w-full relative flex items-center space-x-3 p-3 hover:bg-accent rounded-lg transition cursor-pointer`,selected ? 'bg-neutral-100' : 'bg-background')}>
+    <div
+      onClick={handleClick}
+      className={clsx(
+        `w-full relative flex items-center space-x-3 p-3 hover:bg-accent rounded-lg transition cursor-pointer`,
+        selected ? "bg-neutral-100" : "bg-background"
+      )}
+    >
       {/* {data.isGroup ? (
         <AvatarGroup users={data.users} />
       ) : (
@@ -71,13 +82,18 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({ item, selec
             </p>
             {lastMessage?.createdAt && (
               <p className="text-xs font-light text-accent">
-                {format(new Date(lastMessage.createdAt), 'p')}
+                {format(new Date(lastMessage.createdAt), "p")}
               </p>
             )}
           </div>
-          <p className={clsx(`truncate text-sm`, hasSeen ? 'text-accent' : 'text-primary font-medium')}>
-              {lastMessageText}
-            </p>
+          <p
+            className={clsx(
+              `truncate text-sm`,
+              hasSeen ? "text-accent" : "text-primary font-medium"
+            )}
+          >
+            {lastMessageText}
+          </p>
         </div>
       </div>
     </div>

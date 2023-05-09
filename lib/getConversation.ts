@@ -1,11 +1,11 @@
-import { db } from "./db";
-import { getCurrentUser } from "./session";
+import { db } from "./db"
+import { getCurrentUser } from "./session"
 
 const getConversation = async () => {
-  const currentUser = await getCurrentUser();
+  const currentUser = await getCurrentUser()
 
   if (!currentUser?.id) {
-    return [];
+    return []
   }
 
   try {
@@ -15,18 +15,18 @@ const getConversation = async () => {
       },
       where: {
         userIds: {
-          has : currentUser.id,
-        }
+          has: currentUser.id,
+        },
       },
       include: {
         users: true,
         messages: {
           include: {
             sender: true,
-            seen: true
-          }
-        }
-      }
+            seen: true,
+          },
+        },
+      },
     })
 
     return conversation

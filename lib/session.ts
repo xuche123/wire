@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next"
-import { db } from "@/lib/db"
+
 import { authOptions } from "@/lib/auth"
+import { db } from "@/lib/db"
 
 export async function getCurrentUser() {
   try {
@@ -13,8 +14,8 @@ export async function getCurrentUser() {
 
     const currentUser = await db.user.findUnique({
       where: {
-        email: session.user.email as string
-      }
+        email: session.user.email as string,
+      },
     })
 
     if (!currentUser) {
