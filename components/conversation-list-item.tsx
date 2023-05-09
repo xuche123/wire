@@ -81,17 +81,12 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
               {item.name || otherUser.name}
             </p>
             {lastMessage?.createdAt && (
-              <p className="text-xs font-light text-accent">
+              <p className="text-xs font-light text-primary">
                 {format(new Date(lastMessage.createdAt), "p")}
               </p>
             )}
           </div>
-          <p
-            className={clsx(
-              `truncate text-sm`,
-              hasSeen ? "text-accent" : "text-primary font-medium"
-            )}
-          >
+          <p className={clsx( `truncate text-sm`, hasSeen ? "text-accent" :  "text-primary font-medium")}>
             {lastMessageText}
           </p>
         </div>
