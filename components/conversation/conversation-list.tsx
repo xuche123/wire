@@ -8,8 +8,8 @@ import { MdOutlineGroupAdd } from "react-icons/md"
 
 import useConversation from "@/hooks/useConversation"
 
-import ConversationListItem from "./conversation-list-item"
 import { ThemeToggle } from "../theme-toggle"
+import ConversationListItem from "./conversation-list-item"
 
 interface ConversationListProps {
   initialItems: FullConversationType[]
@@ -42,7 +42,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         {items.map((item) => (
           <ConversationListItem
             key={item.id}
-            item={item}
+            data={item}
             selected={conversationId === item.id}
           />
         ))}

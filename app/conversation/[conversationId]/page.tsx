@@ -1,10 +1,10 @@
 import getConversationById from "@/actions/getConversationByid"
 import getMessages from "@/actions/getMessages"
 
-import EmptyState from "@/components/empty-state"
-import Header from "@/components/conversation/conversation-header"
 import Body from "@/components/conversation/conversation-body"
 import Form from "@/components/conversation/conversation-form"
+import Header from "@/components/conversation/conversation-header"
+import EmptyState from "@/components/empty-state"
 
 interface IParams {
   conversationId: string
@@ -29,7 +29,7 @@ const ConversationId = async ({ params }: { params: IParams }) => {
     <div className="h-full lg:pl-80">
       <div className="flex h-full flex-col">
         <Header conversation={conversation} />
-        <Body />
+        <Body initialMessages={messages} />
         <Form />
       </div>
     </div>

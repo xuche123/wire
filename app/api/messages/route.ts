@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { getCurrentUser } from "@/lib/session";
+import { NextResponse } from "next/server"
+
+import { db } from "@/lib/db"
+import { getCurrentUser } from "@/lib/session"
 
 export async function POST(request: Request) {
   try {
@@ -36,10 +37,10 @@ export async function POST(request: Request) {
 
     const updatedConversation = await db.conversation.update({
       where: {
-       id: conversationId,
+        id: conversationId,
       },
       data: {
-       lastMessageAt: new Date(),
+        lastMessageAt: new Date(),
         messages: {
           connect: {
             id: newMessage.id,
@@ -50,14 +51,14 @@ export async function POST(request: Request) {
         users: true,
         messages: {
           include: {
-           seen: true,
-         },
-       },
-     },
+            seen: true,
+          },
+        },
+      },
     })
 
     return NextResponse.json(newMessage)
-  } catch (error : any) {
+  } catch (error: any) {
     console.log(error, "ERROR_MESSAGES")
     return new NextResponse("Error", { status: 500 })
   }

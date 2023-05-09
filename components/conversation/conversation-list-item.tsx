@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { FullConversationType } from "@/types"
 import { Conversation, Message, User } from "@prisma/client"
@@ -9,44 +9,49 @@ import { format } from "date-fns"
 import { useSession } from "next-auth/react"
 
 import useOtherUser from "@/hooks/useOtherUser"
+import AvatarIcon from "@/components/avatar-icon"
 
-import AvatarIcon from "../avatar-icon"
-
-interface ConversationListItemProps {
-  item: FullConversationType
-  selected: boolean
+interface ConversationBoxProps {
+  data: FullConversationType
+  selected?: boolean
 }
 
-const ConversationListItem: React.FC<ConversationListItemProps> = ({
-  item,
+const ConversationBox: React.FC<ConversationBoxProps> = ({
+  data,
   selected,
 }) => {
-  const router = useRouter()
+  const otherUser = useOtherUser(data)
   const session = useSession()
-  const otherUser = useOtherUser(item)
+  const router = useRouter()
 
   const handleClick = useCallback(() => {
-    router.push(`/conversation/${item.id}`)
-  }, [item.id, router])
+    router.push(`/conversation/${data.id}`)
+  }, [data, router])
 
   const lastMessage = useMemo(() => {
-    const messages = item.messages || []
-    return messages[messages.length - 1]
-  }, [item.messages])
+    const messages = data.messages || []
 
-  const email = useMemo(() => {
-    return session.data?.user?.email
-  }, [session.data?.user?.email])
+    return messages[messages.length - 1]
+  }, [data.messages])
+
+  const userEmail = useMemo(
+    () => session.data?.user?.email,
+    [session.data?.user?.email]
+  )
 
   const hasSeen = useMemo(() => {
-    if (!lastMessage) return false
+    if (!lastMessage) {
+      return false
+    }
 
     const seenArray = lastMessage.seen || []
 
-    if (!email) return false
+    if (!userEmail) {
+      return false
+    }
 
-    return seenArray.filter((user) => user.email === email).length > 0
-  }, [email, lastMessage])
+    return seenArray.filter((user) => user.email === userEmail).length !== 0
+  }, [userEmail, lastMessage])
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
@@ -54,11 +59,12 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
     }
 
     if (lastMessage?.body) {
-      return lastMessage.body
+      return lastMessage?.body
     }
 
-    return "Start a conversation"
+    return "Started a conversation"
   }, [lastMessage])
+
   return (
     <div
       onClick={handleClick}
@@ -67,18 +73,13 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
         selected ? "bg-accent" : "bg-background"
       )}
     >
-      {/* {data.isGroup ? (
-        <AvatarGroup users={data.users} />
-      ) : (
-      )} */}
       <AvatarIcon currentUser={otherUser} />
-
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <span className="absolute inset-0" aria-hidden="true" />
           <div className="mb-1 flex items-center justify-between">
             <p className="text-md font-medium text-primary">
-              {item.name || otherUser.name}
+              {data.name || otherUser.name}
             </p>
             {lastMessage?.createdAt && (
               <p className="text-xs font-light text-primary">
@@ -89,7 +90,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
           <p
             className={clsx(
               `truncate text-sm`,
-              hasSeen ? "text-accent" : "text-primary font-medium"
+              hasSeen ? "text-primary" : "text-primary font-medium"
             )}
           >
             {lastMessageText}
@@ -100,4 +101,4 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
   )
 }
 
-export default ConversationListItem
+export default ConversationBox
