@@ -10,7 +10,7 @@ import { useSession } from "next-auth/react"
 
 import useOtherUser from "@/hooks/useOtherUser"
 
-import AvatarIcon from "./avatar-icon"
+import AvatarIcon from "../avatar-icon"
 
 interface ConversationListItemProps {
   item: FullConversationType
@@ -64,7 +64,7 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
       onClick={handleClick}
       className={clsx(
         `w-full relative flex items-center space-x-3 p-3 hover:bg-accent rounded-lg transition cursor-pointer`,
-        selected ? "bg-neutral-100" : "bg-background"
+        selected ? "bg-accent" : "bg-background"
       )}
     >
       {/* {data.isGroup ? (
@@ -86,7 +86,12 @@ const ConversationListItem: React.FC<ConversationListItemProps> = ({
               </p>
             )}
           </div>
-          <p className={clsx( `truncate text-sm`, hasSeen ? "text-accent" :  "text-primary font-medium")}>
+          <p
+            className={clsx(
+              `truncate text-sm`,
+              hasSeen ? "text-accent" : "text-primary font-medium"
+            )}
+          >
             {lastMessageText}
           </p>
         </div>

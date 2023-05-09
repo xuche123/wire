@@ -1,5 +1,6 @@
-import getConversation from "@/lib/getConversation"
-import ConversationList from "@/components/conversation-list"
+import getConversation from "@/actions/getConversation"
+
+import ConversationList from "@/components/conversation/conversation-list"
 
 export default async function ConversationLayout({
   children,

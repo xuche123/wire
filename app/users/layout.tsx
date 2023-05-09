@@ -1,4 +1,5 @@
-import getUsers from "@/lib/getUsers"
+import getUsers from "@/actions/getUsers"
+
 import Sidebar from "@/components/side-bar"
 import UserList from "@/components/user-list"
 
