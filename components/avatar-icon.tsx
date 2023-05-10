@@ -2,22 +2,29 @@
 
 import { User } from "@prisma/client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import Image from "next/image"
 
 interface AvartarProps {
   currentUser: User
 }
 
 const AvatarIcon: React.FC<AvartarProps> = ({ currentUser }) => {
-  // console.log(currentUser.name)
+  if (currentUser.image) {
+    return (
+      <div className="avatar">
+        <div className="w-12 rounded">
+          <Image src={currentUser.image} alt="img" />
+        </div>
+      </div>
+    )
+  }
+
   return (
-    <Avatar>
-      <AvatarImage src={currentUser.image!} alt="img" />
-      {/* <span className="absolute right-0 top-0 block h-2 w-2 rounded-full bg-green-500 ring-2 ring-white md:h-3 md:w-3"/> */}
-      <AvatarFallback>
-        {currentUser.name?.slice(0, 2).toUpperCase()}
-      </AvatarFallback>
-    </Avatar>
+    <div className="placeholder online avatar">
+      <div className="w-10 rounded-full bg-neutral-focus text-neutral-content">
+        <span className="text-xl">{currentUser.name?.slice(0, 2).toUpperCase()}</span>
+      </div>
+    </div> 
   )
 }
 

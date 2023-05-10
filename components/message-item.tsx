@@ -33,9 +33,7 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
       key={`${data.id}`}
     >
       <div className="chat-image avatar">
-        <div className="relative w-10 rounded-full">
-          <AvatarIcon currentUser={data.sender} />
-        </div>
+        <AvatarIcon currentUser={data.sender} />
       </div>
       <div className="chat-header">
         {isOwn ? "You" : data.sender.name}{" "}

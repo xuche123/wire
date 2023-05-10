@@ -3,13 +3,14 @@
 import { useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { FullConversationType } from "@/types"
-import { Conversation, Message, User } from "@prisma/client"
+// import { Conversation, Message, User } from "@prisma/client"
 import clsx from "clsx"
 import { format } from "date-fns"
 import { useSession } from "next-auth/react"
 
 import useOtherUser from "@/hooks/useOtherUser"
 import AvatarIcon from "@/components/avatar-icon"
+import AvatarIconGroup from "../avatar-icon-group"
 
 interface ConversationBoxProps {
   data: FullConversationType
@@ -73,7 +74,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         selected ? "bg-accent" : "bg-background"
       )}
     >
-      <AvatarIcon currentUser={otherUser} />
+      {data.isGroup ? ( <AvatarIconGroup users={data.users} /> ) : 
+        ( <AvatarIcon currentUser={otherUser} /> 
+      )}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">
           <span className="absolute inset-0" aria-hidden="true" />

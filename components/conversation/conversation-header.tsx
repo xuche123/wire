@@ -3,12 +3,13 @@
 import { useMemo, useState } from "react"
 import Link from "next/link"
 import { Conversation, User } from "@prisma/client"
-import { HiChevronLeft, HiEllipsisHorizontal } from "react-icons/hi2"
+import { HiChevronLeft } from "react-icons/hi2"
 
 import useOtherUser from "@/hooks/useOtherUser"
 
 import AvatarIcon from "../avatar-icon"
 import ProfileSheet from "../profile-sheet"
+import AvatarIconGroup from "../avatar-icon-group"
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -37,7 +38,9 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           >
             <HiChevronLeft size={32} />
           </Link>
-          <AvatarIcon currentUser={otherUser} />
+          {conversation.isGroup ? ( <AvatarIconGroup users={conversation.users} /> ) : 
+            ( <AvatarIcon currentUser={otherUser} /> 
+          )}
           <div className="flex flex-col">
             <div>{conversation.name || otherUser.name}</div>
             <div className="text-sm font-light text-neutral-500">
