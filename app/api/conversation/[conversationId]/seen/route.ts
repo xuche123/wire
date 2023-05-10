@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 
-import { getCurrentUser } from "@/lib/session"
 import { db } from "@/lib/db"
+import { getCurrentUser } from "@/lib/session"
 
 interface IParams {
   conversationId?: string

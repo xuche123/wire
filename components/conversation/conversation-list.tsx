@@ -8,7 +8,7 @@ import { MdOutlineGroupAdd } from "react-icons/md"
 
 import useConversation from "@/hooks/useConversation"
 
-import { ThemeToggle } from "../theme-toggle"
+import Logout from "../logout"
 import ConversationListItem from "./conversation-list-item"
 
 interface ConversationListProps {
@@ -30,11 +30,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
         isOpen ? "hidden" : "block w-full left-0"
       )}
     >
-      <div className="px-5">
+      <div className="">
         <div className="mb-4 flex justify-between pt-4">
-          <div className="text-2xl font-bold text-primary">Messages</div>
-          <ThemeToggle />
-
+          <div className="px-5 text-2xl font-bold text-primary">Messages</div>
           <div className="cursor-pointer rounded-full bg-background p-2 text-primary transition hover:opacity-75">
             <MdOutlineGroupAdd size={20} />
           </div>
@@ -46,6 +44,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
             selected={conversationId === item.id}
           />
         ))}
+        <div className="absolute bottom-0 flex w-full items-center border-t px-4 py-6">
+          <Logout />
+        </div>
       </div>
     </aside>
   )
