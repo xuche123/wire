@@ -45,8 +45,10 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
             </div>
           </div>
         </div>
-        
-        <ProfileSheet data={conversation} isOpen={isOpen} onClose={()=>setIsOpen(false)} />
+
+        <ProfileSheet
+          data={conversation}
+        />      
       </div>
     </>
   )

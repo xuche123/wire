@@ -44,7 +44,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
             selected={conversationId === item.id}
           />
         ))}
-        <div className="absolute bottom-0 flex w-full items-center border-t px-4 py-6">
+        <div className="absolute bottom-0 flex w-full items-center px-4 py-6">
           <Logout />
         </div>
       </div>
