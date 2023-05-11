@@ -10,6 +10,7 @@ import useOtherUser from "@/hooks/useOtherUser"
 import AvatarIcon from "../avatar-icon"
 import ProfileSheet from "../profile-sheet"
 import AvatarIconGroup from "../avatar-icon-group"
+import useActiveList from "@/hooks/useActiveList"
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -17,19 +18,21 @@ interface HeaderProps {
   }
 }
 const Header: React.FC<HeaderProps> = ({ conversation }) => {
+  const { members } = useActiveList()
   const otherUser = useOtherUser(conversation)
+  const isActive = members.indexOf(otherUser?.email!) !== -1
+
   const statusText = useMemo(() => {
     if (conversation.isGroup) {
       return `${conversation.users.length} members`
     }
-    return "Active"
-  }, [conversation])
+    return isActive ? "Active" : "Offline"
+  }, [conversation.isGroup, conversation.users.length, isActive])
 
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      {/* <ProfileSheet data={conversation} isOpen={isOpen} onClose={()=>setIsOpen(false)} /> */}
       <div className="flex w-full items-center justify-between border-b-[1px] bg-background px-4 py-3 shadow-sm sm:px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <Link

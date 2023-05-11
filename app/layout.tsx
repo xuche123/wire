@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 import SessionContext from "./context/SessionContext"
 import ToasterContext from "./context/ToasterContext"
+import ActiveStatus from "@/components/active-status"
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <SessionContext>
               <ToasterContext />
+              <ActiveStatus />
               {children}
             </SessionContext>
           </ThemeProvider>

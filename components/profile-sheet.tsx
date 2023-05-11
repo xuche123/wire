@@ -20,6 +20,7 @@ import { ConfirmModal } from "@/components/modals/confirm-modal"
 
 import AvatarIcon from "./avatar-icon"
 import AvatarIconGroup from "./avatar-icon-group"
+import useActiveList from "@/hooks/useActiveList"
 
 interface ProfileSheetProps {
   data: Conversation & {
@@ -29,7 +30,9 @@ interface ProfileSheetProps {
 const ProfileSheet: React.FC<ProfileSheetProps> = ({
   data,
 }) => {
+  const { members } = useActiveList()
   const otherUser = useOtherUser(data)
+  const isActive = members.indexOf(otherUser?.email!) !== -1
 
   const joinedDate = useMemo(() => {
     return format(new Date(otherUser.createdAt), "PP")
@@ -43,8 +46,8 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
     if (data.isGroup) {
       return `${data.users.length} members`
     }
-    return "Active"
-  }, [data])
+    return isActive ? "Active" : "Offline"
+  }, [data.isGroup, data.users.length, isActive])
 
   return (
     <>
