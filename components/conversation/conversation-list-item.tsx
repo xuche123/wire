@@ -63,7 +63,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       return lastMessage?.body
     }
 
-    return "Start a conversation"
+    return "Started a conversation"
   }, [lastMessage])
 
   return (
@@ -93,7 +93,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
           <p
             className={clsx(
               `truncate text-sm`,
-              hasSeen ? "text-primary" : "text-primary font-medium"
+              hasSeen ? "text-primary font-light" : "text-primary font-medium"
             )}
           >
             {lastMessageText}

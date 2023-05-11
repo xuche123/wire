@@ -19,6 +19,7 @@ import {
 import { ConfirmModal } from "@/components/modals/confirm-modal"
 
 import AvatarIcon from "./avatar-icon"
+import AvatarIconGroup from "./avatar-icon-group"
 
 interface ProfileSheetProps {
   data: Conversation & {
@@ -58,7 +59,9 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
             <div className="relative mt-6 flex-1 px-4 sm:px-6">
               <div className="flex flex-col items-center">
                 <div className="mb-2">
-                  <AvatarIcon currentUser={otherUser} />
+                  {data.isGroup ? ( <AvatarIconGroup users={data.users} /> ) : 
+                    ( <AvatarIcon currentUser={otherUser} /> 
+                  )}
                 </div>
                 <SheetTitle>{title}</SheetTitle>
                 <SheetDescription>{statusText}</SheetDescription>
@@ -76,6 +79,17 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
                     <div>
                       Email
                       <SheetDescription>{otherUser.email}</SheetDescription>
+                    </div>
+                  )}
+                  {data.isGroup && (
+                    <div>
+                      Emails
+                      {data.users.map((user) => (
+                        <SheetDescription key={user.id}>
+                          {user.email}
+                        </SheetDescription>
+                      ))}
+                      {/* <SheetDescription>{otherUser.email}</SheetDescription> */}
                     </div>
                   )}
                   {!data.isGroup && (

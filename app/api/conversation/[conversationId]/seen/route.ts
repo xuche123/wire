@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 
 import { db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
+import { pusherServer } from "@/lib/pusher"
 
 interface IParams {
   conversationId?: string
@@ -56,6 +57,17 @@ export async function POST(request: Request, { params }: { params: IParams }) {
         },
       },
     })
+
+    await pusherServer.trigger(currentUser.email, "conversation:update", {
+      id: conversation.id,
+      messages: [updatedMessage]
+    })
+
+    if (lastMessage.seenIds.indexOf(currentUser.id) !== -1) {
+      return NextResponse.json(conversation)
+    }
+
+    await pusherServer.trigger(conversationId!, "message:update", updatedMessage)
 
     return NextResponse.json(updatedMessage)
   } catch (error) {
