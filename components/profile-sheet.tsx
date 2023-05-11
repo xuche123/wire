@@ -5,6 +5,7 @@ import { Conversation, User } from "@prisma/client"
 import { format } from "date-fns"
 import { HiEllipsisHorizontal } from "react-icons/hi2"
 
+import useActiveList from "@/hooks/useActiveList"
 import useOtherUser from "@/hooks/useOtherUser"
 import { Button } from "@/components/ui/button"
 import {
@@ -20,16 +21,13 @@ import { ConfirmModal } from "@/components/modals/confirm-modal"
 
 import AvatarIcon from "./avatar-icon"
 import AvatarIconGroup from "./avatar-icon-group"
-import useActiveList from "@/hooks/useActiveList"
 
 interface ProfileSheetProps {
   data: Conversation & {
     users: User[]
   }
 }
-const ProfileSheet: React.FC<ProfileSheetProps> = ({
-  data,
-}) => {
+const ProfileSheet: React.FC<ProfileSheetProps> = ({ data }) => {
   const { members } = useActiveList()
   const otherUser = useOtherUser(data)
   const isActive = members.indexOf(otherUser?.email!) !== -1
@@ -62,8 +60,10 @@ const ProfileSheet: React.FC<ProfileSheetProps> = ({
             <div className="relative mt-6 flex-1 px-4 sm:px-6">
               <div className="flex flex-col items-center">
                 <div className="mb-2">
-                  {data.isGroup ? ( <AvatarIconGroup users={data.users} /> ) : 
-                    ( <AvatarIcon currentUser={otherUser} /> 
+                  {data.isGroup ? (
+                    <AvatarIconGroup users={data.users} />
+                  ) : (
+                    <AvatarIcon currentUser={otherUser} />
                   )}
                 </div>
                 <SheetTitle>{title}</SheetTitle>

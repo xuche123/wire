@@ -1,26 +1,26 @@
 "use client"
 
-import { useMemo, useState, useEffect } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { FullConversationType } from "@/types"
+import { User } from "@prisma/client"
 import clsx from "clsx"
+import { find } from "lodash"
+import { useSession } from "next-auth/react"
 
+import { pusherClient } from "@/lib/pusher"
 import useConversation from "@/hooks/useConversation"
 
 import Logout from "../logout"
+import { NewConvoModal } from "../modals/new-convo-modal"
 import ConversationListItem from "./conversation-list-item"
-import { GroupModal } from "../modals/group-modal"
-import { User } from "@prisma/client"
-import { useSession } from "next-auth/react"
-import { pusherClient } from "@/lib/pusher"
-import { find } from "lodash"
 
 interface ConversationListProps {
-  initialItems: FullConversationType[],
+  initialItems: FullConversationType[]
   users: User[]
 }
 const ConversationList: React.FC<ConversationListProps> = ({
   initialItems,
-  users
+  users,
 }) => {
   const [items, setItems] = useState(initialItems)
   const session = useSession()
@@ -30,7 +30,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const pusherKey = useMemo(() => {
     return session.data?.user?.email
   }, [session.data?.user?.email])
-  
 
   useEffect(() => {
     if (!pusherKey) {
@@ -44,29 +43,29 @@ const ConversationList: React.FC<ConversationListProps> = ({
         }
 
         return [conversation, ...current]
-      }) 
+      })
     }
 
     const updateHandler = (conversation: FullConversationType) => {
-      setItems((current) => 
-         current.map((currentConversation) => {
+      setItems((current) =>
+        current.map((currentConversation) => {
           if (currentConversation.id === conversation.id) {
             return {
               ...currentConversation,
-              messages: conversation.messages
+              messages: conversation.messages,
             }
           }
 
           return currentConversation
-        }))
+        })
+      )
     }
 
     const deleteHandler = (conversation: FullConversationType) => {
       setItems((current) => {
         return [...current.filter((convo) => convo.id !== conversation.id)]
-      });
+      })
     }
-        
 
     pusherClient.subscribe(pusherKey)
     pusherClient.bind("conversation:new", newConversationHandler)
@@ -81,7 +80,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
     }
   })
 
-
   return (
     <>
       <aside
@@ -94,7 +92,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
           <div className="mb-4 flex justify-between pt-4">
             <div className="px-5 text-2xl font-bold text-primary">Messages</div>
             <div className="cursor-pointer rounded-full bg-background text-primary transition hover:opacity-75">
-              <GroupModal users={users} />
+              <NewConvoModal users={users} />
             </div>
           </div>
           {items.map((item) => (

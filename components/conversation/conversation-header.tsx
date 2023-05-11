@@ -5,12 +5,12 @@ import Link from "next/link"
 import { Conversation, User } from "@prisma/client"
 import { HiChevronLeft } from "react-icons/hi2"
 
+import useActiveList from "@/hooks/useActiveList"
 import useOtherUser from "@/hooks/useOtherUser"
 
 import AvatarIcon from "../avatar-icon"
-import ProfileSheet from "../profile-sheet"
 import AvatarIconGroup from "../avatar-icon-group"
-import useActiveList from "@/hooks/useActiveList"
+import ProfileSheet from "../profile-sheet"
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -41,8 +41,10 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           >
             <HiChevronLeft size={32} />
           </Link>
-          {conversation.isGroup ? ( <AvatarIconGroup users={conversation.users} /> ) : 
-            ( <AvatarIcon currentUser={otherUser} /> 
+          {conversation.isGroup ? (
+            <AvatarIconGroup users={conversation.users} />
+          ) : (
+            <AvatarIcon currentUser={otherUser} />
           )}
           <div className="flex flex-col">
             <div>{conversation.name || otherUser.name}</div>
@@ -52,9 +54,7 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           </div>
         </div>
 
-        <ProfileSheet
-          data={conversation}
-        />      
+        <ProfileSheet data={conversation} />
       </div>
     </>
   )

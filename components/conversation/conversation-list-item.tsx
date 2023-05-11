@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react"
 
 import useOtherUser from "@/hooks/useOtherUser"
 import AvatarIcon from "@/components/avatar-icon"
+
 import AvatarIconGroup from "../avatar-icon-group"
 
 interface ConversationBoxProps {
@@ -74,8 +75,10 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
         selected ? "bg-accent" : "bg-background"
       )}
     >
-      {data.isGroup ? ( <AvatarIconGroup users={data.users} /> ) : 
-        ( <AvatarIcon currentUser={otherUser} /> 
+      {data.isGroup ? (
+        <AvatarIconGroup users={data.users} />
+      ) : (
+        <AvatarIcon currentUser={otherUser} />
       )}
       <div className="min-w-0 flex-1">
         <div className="focus:outline-none">

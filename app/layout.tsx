@@ -1,11 +1,11 @@
 import "@/styles/globals.css"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
+import ActiveStatus from "@/components/active-status"
 import { ThemeProvider } from "@/components/theme-provider"
 
 import SessionContext from "./context/SessionContext"
 import ToasterContext from "./context/ToasterContext"
-import ActiveStatus from "@/components/active-status"
 
 interface RootLayoutProps {
   children: React.ReactNode

@@ -53,17 +53,15 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
       ) : (
         <div
           className={cn("chat-bubble", {
-            "bg-accent text-primary": isOwn,
-            "bg-secondary text-primary": !isOwn,
+            "bg-accent text-accent-foreground": isOwn,
+            "chat-bubble-primary": !isOwn,
           })}
         >
           {data.body}
         </div>
       )}
       {isLast && isOwn && seenList.length > 0 && (
-        <div className="text-xs font-light text-primary">
-          {`Seen by ${seenList}`}
-        </div>
+        <div className="chat-footer opacity-50">{`Seen by ${seenList}`}</div>
       )}
     </div>
   )

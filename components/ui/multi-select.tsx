@@ -1,16 +1,16 @@
 "use client"
 
-import ReactSelect, { SingleValue } from "react-select"
+import ReactSelect from "react-select"
 
 interface MultiSelectProps {
   label: string
   value?: Record<string, any>
-  onChange: (value: SingleValue<Record<string, any>>) => void
+  onChange: (value: Record<string, any>) => void
   options: Record<string, any>[]
   disabled?: boolean
 }
 
-const Select: React.FC<MultiSelectProps> = ({
+const MultiSelect: React.FC<MultiSelectProps> = ({
   label,
   value,
   onChange,
@@ -35,6 +35,7 @@ const Select: React.FC<MultiSelectProps> = ({
           isDisabled={disabled}
           value={value}
           onChange={onChange}
+          isMulti
           options={options}
           menuPortalTarget={document.body}
           styles={{
@@ -49,4 +50,4 @@ const Select: React.FC<MultiSelectProps> = ({
   )
 }
 
-export default Select
+export default MultiSelect

@@ -1,14 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
-
-
-import { db } from "@/lib/db";
-import { pusherServer } from "@/lib/pusher";
-import { getCurrentUser } from "@/lib/session";
-
-
-
-
+import { db } from "@/lib/db"
+import { pusherServer } from "@/lib/pusher"
+import { getCurrentUser } from "@/lib/session"
 
 interface IParams {
   conversationId?: string

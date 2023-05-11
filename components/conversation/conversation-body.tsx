@@ -2,13 +2,13 @@
 
 import { useEffect, useRef, useState } from "react"
 import { FullMessageType } from "@/types"
-import { pusherClient } from "@/lib/pusher"
 import axios from "axios"
+import { find } from "lodash"
 
+import { pusherClient } from "@/lib/pusher"
 import useConversation from "@/hooks/useConversation"
 
 import MessageItem from "../message-item"
-import { find } from "lodash"
 
 interface BodyProps {
   initialMessages: FullMessageType[]
@@ -28,7 +28,7 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
   useEffect(() => {
     pusherClient.subscribe(conversationId)
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
-    
+
     const messageHandler = (message: FullMessageType) => {
       setMessages((current) => {
         // if message already exists, don't add it
@@ -42,24 +42,25 @@ const Body: React.FC<BodyProps> = ({ initialMessages }) => {
     }
 
     const updateMessageHandler = (newMessage: FullMessageType) => {
-      setMessages((current) => current.map((currentMessage) => {
-        if (currentMessage.id === newMessage.id) {
-          return newMessage;
-        }
-  
-        return currentMessage;
-      }))
-    };
+      setMessages((current) =>
+        current.map((currentMessage) => {
+          if (currentMessage.id === newMessage.id) {
+            return newMessage
+          }
 
-    pusherClient.bind('messages:new', messageHandler)
-    pusherClient.bind('message:update', updateMessageHandler)
-    
+          return currentMessage
+        })
+      )
+    }
+
+    pusherClient.bind("messages:new", messageHandler)
+    pusherClient.bind("message:update", updateMessageHandler)
+
     return () => {
       pusherClient.unsubscribe(conversationId)
-      pusherClient.unbind('messages:new', messageHandler)
-      pusherClient.unbind('message:update', updateMessageHandler)
+      pusherClient.unbind("messages:new", messageHandler)
+      pusherClient.unbind("message:update", updateMessageHandler)
     }
-    
   }, [conversationId, messages])
 
   return (
