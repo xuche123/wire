@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo, useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
 import { FullConversationType } from "@/types"
 import clsx from "clsx"
 
@@ -25,8 +24,6 @@ const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   const [items, setItems] = useState(initialItems)
   const session = useSession()
-
-  const router = useRouter()
 
   const { conversationId, isOpen } = useConversation()
 
@@ -63,16 +60,24 @@ const ConversationList: React.FC<ConversationListProps> = ({
           return currentConversation
         }))
     }
+
+    const deleteHandler = (conversation: FullConversationType) => {
+      setItems((current) => {
+        return [...current.filter((convo) => convo.id !== conversation.id)]
+      });
+    }
         
 
     pusherClient.subscribe(pusherKey)
     pusherClient.bind("conversation:new", newConversationHandler)
     pusherClient.bind("conversation:update", updateHandler)
+    pusherClient.bind("conversation:delete", deleteHandler)
 
     return () => {
       pusherClient.unsubscribe(pusherKey)
       pusherClient.unbind("conversation:new", newConversationHandler)
       pusherClient.unbind("conversation:update", updateHandler)
+      pusherClient.unbind("conversation:delete", deleteHandler)
     }
   })
 
